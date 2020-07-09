@@ -215,7 +215,9 @@ namespace AmiiboScanner
 
             writeSpacer();
 
-            foreach (var pair in json.AmiiboSeries.Where(e => !Regex.IsMatch(e.Key, "^0x[a-f0-9]{2}$")))
+            var hexRegex = new Regex("^0x[a-f0-9]+$", RegexOptions.Compiled);
+
+            foreach (var pair in json.AmiiboSeries.Where(e => e.Key.Length != 4 || !hexRegex.IsMatch(e.Key)))
             {
                 returnValue |= (int)ErrorBits.InvalidAmiiboSeriesID;
                 Console.WriteLine($"Invalid amiibo series ID: {pair.Key} - {pair.Value}");
@@ -224,7 +226,7 @@ namespace AmiiboScanner
 
             writeSpacer();
 
-            foreach (var pair in json.Amiibos.Where(e => !Regex.IsMatch(e.Key, "^0x[a-f0-9]{16}$")))
+            foreach (var pair in json.Amiibos.Where(e => e.Key.Length != 18 || !hexRegex.IsMatch(e.Key)))
             {
                 returnValue |= (int)ErrorBits.InvalidAmiiboID;
                 Console.WriteLine($"Invalid amiibo ID: {pair.Key} - {pair.Value.Name}");
@@ -233,7 +235,7 @@ namespace AmiiboScanner
 
             writeSpacer();
 
-            foreach (var pair in json.Characters.Where(e => !Regex.IsMatch(e.Key, "^0x[a-f0-9]{4}$")))
+            foreach (var pair in json.Characters.Where(e => e.Key.Length != 6 || !hexRegex.IsMatch(e.Key)))
             {
                 returnValue |= (int)ErrorBits.InvalidCharacterID;
                 Console.WriteLine($"Invalid amiibo character ID: {pair.Key} - {pair.Value}");
@@ -242,7 +244,7 @@ namespace AmiiboScanner
 
             writeSpacer();
 
-            foreach (var pair in json.GameSeries.Where(e => !Regex.IsMatch(e.Key, "^0x[a-f0-9]{3}$")))
+            foreach (var pair in json.GameSeries.Where(e => e.Key.Length != 5 || !hexRegex.IsMatch(e.Key)))
             {
                 returnValue |= (int)ErrorBits.InvalidGameSeriesID;
                 Console.WriteLine($"Invalid game series ID: {pair.Key} - {pair.Value}");
@@ -251,7 +253,7 @@ namespace AmiiboScanner
 
             writeSpacer();
 
-            foreach (var pair in json.Types.Where(e => !Regex.IsMatch(e.Key, "^0x[a-f0-9]{2}$")))
+            foreach (var pair in json.Types.Where((e => e.Key.Length != 4 || !hexRegex.IsMatch(e.Key))))
             {
                 returnValue |= (int)ErrorBits.InvalidTypeID;
                 Console.WriteLine($"Invalid amiibo type ID: {pair.Key} - {pair.Value}");
